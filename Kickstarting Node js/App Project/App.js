@@ -1,8 +1,19 @@
-const http = require('http');
-const routes = require('./routes.js');
+const http = require('http'); // Node Imports
 
-console.log(routes.someText);
+const express = require('express'); // Express Imports
 
-const server = http.createServer(routes.handler);
+const app = express(); // express() is a function and calling it returns request handler
 
-server.listen(4000);
+// use() allows us to use middleware
+app.use( (request, response, next) => {
+
+    console.log('In the middleware');
+    next(); // next() allows the request to continue onto the next middleware in line
+}) 
+
+app.use( (request, response, next) => {
+    console.log('In the second middleware');
+    response.send(`<h1> Hello from Express </h1>`);
+}) 
+
+app.listen(3000);
