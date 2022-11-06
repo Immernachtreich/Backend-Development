@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title> Appointment </title>
+
+        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/css/contact-us.css">
+    </head>
+
+    <body>
+        <header class="main-header">
+
+            <nav class="main-header__nav">
+
+                <ul class="main-header__item-list">
+
+                    <li class="main-header__item"><a href="/shop"> Shop </a></li>
+                    <li class="main-header__item"><a href="/admin/add-product" > Add Product </a></li>
+                    <li class="main-header__item"> <a href="/contactus" class="active"> Contact Us </a></li>
+
+                </ul>
+
+            </nav>
+            
+        </header>
+        
+        <main>
+            <form action="/success" method="POST">
+
+                <fieldset>
+                <h3>Book a Call</h3>
+    
+                <p style="text-align: center; font-size: 17px">
+                Book a Call Slot and you will recieve a call on the Selected time
+                </p>
+
+                <hr>
+
+                <label for="Name"> Name </label> <br>
+                <input type="text" name="Name" id="name" > <br>
+    
+                <label for="Email"> Email </label> <br>
+                <input type="email" name="Email" id="email"> <br>
+    
+                <br>
+    
+                <button type="submit" id="Call1"> Get a Call </button>
+                </fieldset>
+            </form>
+        </main>
+        
+    </body>
+</html>

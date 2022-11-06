@@ -1,0 +1,56 @@
+h3 {
+  text-align: center;
+  font-size: 35px;
+  color: orange;
+}
+
+body {
+  background-image: url(https://i.pinimg.com/736x/15/1e/99/151e99f73bc7629406867e7f68dbf058.jpg);
+}
+
+fieldset {
+
+  background-color: azure;
+  width: 600px;
+  margin: auto;
+  border-radius: 10px;
+  background-blend-mode: multiply;
+  opacity: 0.9;
+  padding-bottom: 50px;
+
+}
+
+input {
+  width: 500px;
+  color: blue;
+  border-radius: 5px;
+  font-size: medium;
+}
+
+label {
+  color: orange;
+  font-size: 20px;
+}
+
+#date1 {
+  width: 247px;
+  font-size: medium;
+}
+
+#time1 {
+  width: 247px;
+  font-size: medium;
+}
+
+#Call1 {
+  width: 200px;
+  height: 35px;
+  background-color: orange;
+  background-blend-mode: color;
+  font-size: medium;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 600;
+  border-radius: 5px;
+}
