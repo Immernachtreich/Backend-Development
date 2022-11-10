@@ -1,0 +1,15 @@
+On Submit: (POST)
+localhost:2000/users/add-user
+
+On Refresh/Load: (GET)
+localhost:2000/users/get-users
+
+On Delete: (POST)
+localhost:2000/users/delete-user/(id) or you can use query params /id=?
+
+On Edit click: (GET)
+localhost:2000/users/edit-user/(id)
+
+On Edit Submit: (POST)
+localhost:2000/users/edit-user/(id)
+
