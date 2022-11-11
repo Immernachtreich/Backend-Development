@@ -1,0 +1,14 @@
+On Submit: POST
+localhost:5005/expenses/add-expense
+
+On Page Refresh / Reload: GET
+localhost:5005/expenses/get-expenses
+
+On Delete: POST
+localhost:5005/expenses/delete-expense
+
+On Edit: GET
+localhost:5005/expenses/edit-expense
+
+On Edit: POST
+localhost:5005/expenses/edit-expense
