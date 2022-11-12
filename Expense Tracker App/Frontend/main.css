@@ -42,6 +42,11 @@
     margin-left: 10px;
 }
 
+#Submit-Button:hover {
+    background-color: #8a929d;
+    border: 5px solid #8a929d;
+}
+
 .Inner-Div {
     margin: auto;
     width: 70%;
@@ -79,15 +84,23 @@
     
 }
 
+.Delete-Button:hover {
+    background-color: #7d1b1b;
+}
+
 .Edit-Button {
     float: right;
     position: relative;
     right: 150px;
 
-    background-color: burlywood;
+    background-color: rgb(154, 156, 98);
     color: azure;
     border-radius: 8px;
     border: none;
     padding: 4px;
     font-size: 15px;
+}
+
+.Edit-Button:hover {
+    background-color: rgb(95, 96, 59);
 }
