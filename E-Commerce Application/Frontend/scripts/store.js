@@ -49,6 +49,18 @@ function addToCart(e) {
 
         cartList.innerHTML += li;
 
+        const totalDiv = document.getElementById('total-div');
+
+        const existingPriceString = totalDiv.innerText.split(':');
+        const existingPrice = parseFloat(existingPriceString[1]);
+
+        const justPrice = albumDiv.children[2].children[0].children[0].innerText;
+        const floatPrice = parseFloat(justPrice);
+
+        const totalPrice = existingPrice + floatPrice;
+
+        totalDiv.innerText = `Total: ${totalPrice}`;
+
         popupNotification(title);
     }
 }
@@ -75,6 +87,19 @@ function removeItemFromtCart(e) {
     if(e.target.classList.contains('remove-button')) {
         
         const li = e.target.parentElement;
+
+        const totalDiv = document.getElementById('total-div');
+
+        const existingPriceString = totalDiv.innerText.split(':');
+        const existingPrice = parseFloat(existingPriceString[1]);
+
+        const currentItemPriceString = e.target.parentElement.children[2].innerText.split('$')[1];
+        const currentItemPrice = parseFloat(currentItemPriceString);
+
+        const totalPrice = existingPrice - currentItemPrice;
+
+        totalDiv.innerText = `Total: ${totalPrice}`;
+
         cartList.removeChild(li);
     }
 }

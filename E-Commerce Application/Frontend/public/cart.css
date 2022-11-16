@@ -48,8 +48,8 @@
 .purchase{
     width: 100px;
     height: 40px;
-    margin-top: 50px;
-    margin-left: 150px;
+    position: relative;
+    left: 15%;
     background-color: rgb(171, 203, 202);
     border: none;
     border-radius: 5px;
@@ -63,4 +63,10 @@
 
 .cart-nav.active {
     transform: translateX(0%);
+}
+
+.total-div {
+    display: inline;
+    position: relative;
+    left: 30%;
 }
