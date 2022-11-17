@@ -235,3 +235,4 @@ async function getProducts() {
         console.log(err);
     }
 }
+
