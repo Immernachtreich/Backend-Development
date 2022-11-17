@@ -20,12 +20,20 @@ const xButton = document.getElementById('close-btn');
     })
 }
 
+// Shop Section Div for event listener
 const shopSectionDiv = document.getElementById('shop-section');
+
+// Cart Section Div for event listener
 const cartList = document.getElementById('cart-items-ul');
 
+/*
+* Event Listeners
+*/
 shopSectionDiv.addEventListener('click', addToCart);
 
 cartList.addEventListener('click', removeItemFromtCart);
+
+window.addEventListener('DOMContentLoaded', getProducts);
 
 function addToCart(e) {
 
@@ -101,5 +109,64 @@ function removeItemFromtCart(e) {
         totalDiv.innerText = `Total: ${totalPrice}`;
 
         cartList.removeChild(li);
+    }
+}
+
+async function getProducts() {
+
+    try {
+        const musicDiv = document.getElementById('Album-container');
+        const merchDiv = document.getElementById('product-container');
+
+        const musics = await axios.get('http://localhost:5010/products/get-musics');
+
+        musics.data.forEach((musics) => {
+
+            const musicsLiDiv = 
+                `
+                <div class="Album-1">
+
+                    <h3>${musics.title}</h3>
+
+                    <div class="img-cont">
+                        <img class="product-imgs" src="${musics.imageUrl}" alt="Album-1">
+                    </div>
+
+                    <div class="product-details">
+                        <span>$<span>${musics.price}</span></span>
+                        <button class="shop-btn" type='button'>ADD TO CART</button>
+                    </div>
+
+                </div>
+                `
+            
+            musicDiv.innerHTML += musicsLiDiv;
+        })
+
+        const merches = await axios.get('http://localhost:5010/products/get-merches');
+
+        merches.data.forEach((merches) => {
+            const merchesLiDiv = 
+            `
+                <div>
+                    <h3>${merches.title}</h3>
+
+                    <div class="img-cont">
+                        <img class="product-imgs" src="${merches.imageUrl}" alt="Mug">
+                    </div>
+
+                    <div class="product-details">
+                        <span>$<span>${merches.price}</span></span>
+                        <button class="shop-btn" type='button'>ADD TO CART</button>
+                    </div>
+
+                </div> 
+            `
+
+            merchDiv.innerHTML += merchesLiDiv;
+        })
+
+    } catch(err) {
+        console.log(err);
     }
 }
