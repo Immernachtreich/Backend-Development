@@ -1,7 +1,7 @@
 const Music = require('../models/music.js');
 const Merch = require('../models/merch.js');
 
-exports.getMusic= ((req, res, next) => {
+exports.getMusic= (req, res, next) => {
 
     Music
         .findAll()
@@ -11,9 +11,9 @@ exports.getMusic= ((req, res, next) => {
         .catch(err => {
             console.log(err);
         })
-})
+};
 
-exports.getMerch= ((req, res, next) => {
+exports.getMerch= (req, res, next) => {
 
     Merch
         .findAll()
@@ -23,4 +23,27 @@ exports.getMerch= ((req, res, next) => {
         .catch(err => {
             console.log(err);
         })
-})
+};
+
+exports.getProduct = (req, res, next) => {
+
+    const id = req.params.id;
+
+    if(id <= 999) {
+        Music
+            .findByPk(id)
+            .then((music) => {
+                res.json(music);
+            })
+            .catch(err => console.log(err))
+    }
+    else {
+
+        Merch
+            .findByPk(id)
+            .then((merch) => {
+                res.json(merch);
+            })
+            .catch(err => console.log(err))
+    }
+};

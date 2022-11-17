@@ -35,41 +35,73 @@ cartList.addEventListener('click', removeItemFromtCart);
 
 window.addEventListener('DOMContentLoaded', getProducts);
 
-function addToCart(e) {
+async function addToCart(e) {
 
     if(e.target.classList.contains('shop-btn')) {
         const albumDiv = e.target.parentElement.parentElement;
 
-        const title = albumDiv.children[0].innerText;
-        const price = albumDiv.children[2].children[0].innerText;
-        const imgSrc = albumDiv.children[1].children[0].src;
+        const url = 'http://localhost:5010/products/get-product/' + albumDiv.id;
+        
+        try{
+            const product = await axios.get(url);
 
-        const li = 
-            `
-            <li id="${title}" class="cart-list-ul-li">
-                <img src="${imgSrc}" alt="${title}">
-                <div class="title-div-cart"> ${title} </div>
-                <div class="price-div-cart"> ${price} </div>
-                <input type="number" id="quantity-input" class="quantity-input">
-                <button class="remove-button" id="remove-button"> Remove </button>
-            </li>
-            `
+            const title = product.data.title;
+            const price = product.data.price;
+            const imageUrl = product.data.imageUrl;
+            const id = product.data.id;
 
-        cartList.innerHTML += li;
+            // const title = albumDiv.children[0].innerText;
+            // const price = albumDiv.children[2].children[0].innerText;
+            // const imgUrl = albumDiv.children[1].children[0].src;
 
-        const totalDiv = document.getElementById('total-div');
+            const productInfo = {
+                id : id,
+                title : title,
+                price : price,
+                imageUrl : imageUrl,
+                quantity: 1
+            }
 
-        const existingPriceString = totalDiv.innerText.split(':');
-        const existingPrice = parseFloat(existingPriceString[1]);
+            const response = await axios.post('http://localhost:5010/cart/add-to-cart', productInfo);
 
-        const justPrice = albumDiv.children[2].children[0].children[0].innerText;
-        const floatPrice = parseFloat(justPrice);
+            if(response.data.alreadyExisting) {
 
-        const totalPrice = existingPrice + floatPrice;
+                window.alert('Item is already in the cart');
 
-        totalDiv.innerText = `Total: ${totalPrice}`;
+            } else {
 
-        popupNotification(title);
+                const li = 
+                `
+                <li id="${id}" class="cart-list-ul-li">
+                    <img src="${imageUrl}" alt="${title}">
+                    <div class="title-div-cart"> ${title} </div>
+                    <div class="price-div-cart"> ${price} </div>
+                    <input type="number" id="quantity-input" class="quantity-input" value="1">
+                    <button class="remove-button" id="remove-button"> Remove </button>
+                </li>
+                `
+
+                cartList.innerHTML += li;
+
+                const totalDiv = document.getElementById('total-div');
+
+                const existingPriceString = totalDiv.innerText.split(':');
+                const existingPrice = parseFloat(existingPriceString[1]);
+
+                const justPrice = albumDiv.children[2].children[0].children[0].innerText;
+                const floatPrice = parseFloat(justPrice);
+
+                const totalPrice = existingPrice + floatPrice;
+
+                totalDiv.innerText = `Total: ${totalPrice}`;
+
+                popupNotification(title);
+            }
+
+        }
+        catch(err) {
+            console.log(err);
+        }
     }
 }
 
@@ -124,7 +156,7 @@ async function getProducts() {
 
             const musicsLiDiv = 
                 `
-                <div class="Album-1">
+                <div id="${musics.id}">
 
                     <h3>${musics.title}</h3>
 
@@ -148,7 +180,7 @@ async function getProducts() {
         merches.data.forEach((merches) => {
             const merchesLiDiv = 
             `
-                <div>
+                <div id="${merches.id}">
                     <h3>${merches.title}</h3>
 
                     <div class="img-cont">
@@ -164,6 +196,39 @@ async function getProducts() {
             `
 
             merchDiv.innerHTML += merchesLiDiv;
+        })
+
+        const cartItems = await axios.get('http://localhost:5010/cart/get-products');
+
+        console.log(cartItems.data);
+
+        cartItems.data.forEach((cartItems) => {
+
+            const li = 
+                `
+                <li id="${cartItems.id}" class="cart-list-ul-li">
+                    <img src="${cartItems.imageUrl}" alt="${cartItems.title}">
+                    <div class="title-div-cart"> ${cartItems.title} </div>
+                    <div class="price-div-cart"> ${cartItems.title} </div>
+                    <input type="number" id="quantity-input" class="quantity-input" value="1">
+                    <button class="remove-button" id="remove-button"> Remove </button>
+                </li>
+                `
+
+            cartList.innerHTML += li;
+
+            // const totalDiv = document.getElementById('total-div');
+
+            // const existingPriceString = totalDiv.innerText.split(':');
+            // const existingPrice = parseFloat(existingPriceString[1]);
+
+            // const justPrice = albumDiv.children[2].children[0].children[0].innerText;
+            // const floatPrice = parseFloat(justPrice);
+
+            // const totalPrice = existingPrice + floatPrice;
+
+            // totalDiv.innerText = `Total: ${totalPrice}`;
+
         })
 
     } catch(err) {

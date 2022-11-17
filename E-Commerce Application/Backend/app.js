@@ -4,7 +4,9 @@ const cors = require('cors'); // Cors Import
 
 const sequelize = require('./util/database.js'); // MySQL Database import (Local Import)
 
+// Route Imports
 const productRoutes = require('./routes/product.js'); // Product Routes Imports
+const cartRoutes = require('./routes/cart.js') // Cart Routes Imports
 
 const app = express(); // Initializing the backend
 
@@ -13,6 +15,7 @@ app.use(bodyParser.json({ extended: false })); // Initializing Body Parser
 
 // Product Routes
 app.use('/products', productRoutes);
+app.use('/cart', cartRoutes);
 
 // Error Routes
 app.use((req, res) => {
