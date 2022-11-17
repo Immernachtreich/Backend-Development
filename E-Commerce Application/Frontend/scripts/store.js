@@ -88,10 +88,7 @@ async function addToCart(e) {
                 const existingPriceString = totalDiv.innerText.split(':');
                 const existingPrice = parseFloat(existingPriceString[1]);
 
-                const justPrice = albumDiv.children[2].children[0].children[0].innerText;
-                const floatPrice = parseFloat(justPrice);
-
-                const totalPrice = existingPrice + floatPrice;
+                const totalPrice = (existingPrice + price).toFixed(2);
 
                 totalDiv.innerText = `Total: ${totalPrice}`;
 
@@ -122,21 +119,23 @@ function popupNotification(title) {
     },3000)
 }
 
-function removeItemFromtCart(e) {
+async function removeItemFromtCart(e) {
 
     if(e.target.classList.contains('remove-button')) {
         
         const li = e.target.parentElement;
 
+        const url = 'http://localhost:5010/cart/delete-product/' + li.id;
+
+        const response = await axios.post(url);
+
         const totalDiv = document.getElementById('total-div');
 
-        const existingPriceString = totalDiv.innerText.split(':');
-        const existingPrice = parseFloat(existingPriceString[1]);
+        const existingPrice = totalDiv.innerText.split(':')[1];
 
-        const currentItemPriceString = e.target.parentElement.children[2].innerText.split('$')[1];
-        const currentItemPrice = parseFloat(currentItemPriceString);
+        const currentItemPrice = response.data.price;
 
-        const totalPrice = existingPrice - currentItemPrice;
+        const totalPrice = (parseFloat(existingPrice) - parseFloat(currentItemPrice)).toFixed(2);
 
         totalDiv.innerText = `Total: ${totalPrice}`;
 
@@ -200,36 +199,30 @@ async function getProducts() {
 
         const cartItems = await axios.get('http://localhost:5010/cart/get-products');
 
-        console.log(cartItems.data);
+        let totalPrice = 0;
 
         cartItems.data.forEach((cartItems) => {
+
+            totalPrice = (parseFloat(totalPrice) + parseFloat(cartItems.price)).toFixed(2);
 
             const li = 
                 `
                 <li id="${cartItems.id}" class="cart-list-ul-li">
                     <img src="${cartItems.imageUrl}" alt="${cartItems.title}">
                     <div class="title-div-cart"> ${cartItems.title} </div>
-                    <div class="price-div-cart"> ${cartItems.title} </div>
+                    <div class="price-div-cart"> ${cartItems.price} </div>
                     <input type="number" id="quantity-input" class="quantity-input" value="1">
                     <button class="remove-button" id="remove-button"> Remove </button>
                 </li>
-                `
+                `;
 
             cartList.innerHTML += li;
-
-            // const totalDiv = document.getElementById('total-div');
-
-            // const existingPriceString = totalDiv.innerText.split(':');
-            // const existingPrice = parseFloat(existingPriceString[1]);
-
-            // const justPrice = albumDiv.children[2].children[0].children[0].innerText;
-            // const floatPrice = parseFloat(justPrice);
-
-            // const totalPrice = existingPrice + floatPrice;
-
-            // totalDiv.innerText = `Total: ${totalPrice}`;
-
         })
+
+
+        const totalDiv = document.getElementById('total-div');
+
+        totalDiv.innerText = `Total: ${totalPrice}`;
 
     } catch(err) {
         console.log(err);

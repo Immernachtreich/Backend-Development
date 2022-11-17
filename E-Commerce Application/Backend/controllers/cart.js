@@ -58,3 +58,19 @@ exports.getProducts = (req, res, next) => {
         })
         .catch(err => console.log(err))
 }
+
+exports.deleteProduct = (req, res, next) => {
+    const id = req.params.id;
+    
+    Cart
+        .findByPk(id)
+        .then((result => {
+            return result.destroy();
+        }))
+        .then((response) => {
+            res.json(response);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+}
