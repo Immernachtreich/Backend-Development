@@ -1,5 +1,7 @@
 const Cart = require('../models/cart.js');
 
+const ITEMS_PER_PAGE = 2;
+
 exports.postAddProduct = (req, res, next) => {
 
     const id = req.body.id;
@@ -51,12 +53,41 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
 
-    Cart
-        .findAll()
-        .then((products) => {
-            res.json(products);
+    const pageNumber = req.query.page;
+    let totalProducts;
+
+    Cart.
+        count()
+        .then((numberOfProducts) => {
+
+            totalProducts = numberOfProducts;
+
+            return Cart.findAll({
+                    offset: (pageNumber - 1) * ITEMS_PER_PAGE,
+                    limit: ITEMS_PER_PAGE
+                })
         })
-        .catch(err => console.log(err))
+        .then((cartItems) => {
+
+            const dataOfProducts = {
+                cartItems: cartItems,
+
+                totalProducts: totalProducts,
+
+                hasNextPage: (ITEMS_PER_PAGE * pageNumber) < totalProducts,
+                hasPreviousPage: pageNumber > 1,
+
+                nextPage: parseInt(pageNumber) + 1,
+                currentPage: parseInt(pageNumber),
+                previousPage: parseInt(pageNumber) - 1,
+
+                lastPage: Math.ceil(totalProducts / ITEMS_PER_PAGE)
+            }
+            res.json(dataOfProducts);
+        })
+        .catch(err => {
+            console.log(err);
+        })
 }
 
 exports.deleteProduct = (req, res, next) => {

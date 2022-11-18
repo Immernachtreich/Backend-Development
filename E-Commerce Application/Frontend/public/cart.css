@@ -70,3 +70,20 @@
     position: relative;
     left: 30%;
 }
+
+.cart-page-buttons {
+    position: relative;
+    left: 40%;
+    margin: 2rem 0.5rem;
+    width: 30px;
+    height: 30px;
+    border: 3px solid  #4980ef;
+    background-color: rgb(171, 203, 202);
+    border-radius: 5px;
+}
+
+.cart-page-buttons:hover,
+.cart-page-buttons.active {
+    background-color: #4980ef;
+    color: white;
+}   

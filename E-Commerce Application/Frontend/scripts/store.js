@@ -26,16 +26,37 @@ const shopSectionDiv = document.getElementById('shop-section');
 // Cart Section Div for event listener
 const cartList = document.getElementById('cart-items-ul');
 
+// Page Buttons Div for event listener
+const pageButtonsDiv = document.getElementById('page-buttons-div');
+const cartButtonsDiv = document.getElementById('cart-page-buttons-div');
+
+const musicDiv = document.getElementById('Album-container');
+const merchDiv = document.getElementById('product-container');
+
+
 /*
 * Event Listeners
 */
+
 shopSectionDiv.addEventListener('click', addToCart);
 
 cartList.addEventListener('click', removeItemFromtCart);
 
-window.addEventListener('DOMContentLoaded', getProducts);
+window.addEventListener('DOMContentLoaded', () => {
+    const page = 1
+    getProducts(1);
+});
 
-async function addToCart(e) {
+window.addEventListener('DOMContentLoaded', () => {
+    getCartProducts(1);
+});
+
+// pageButtonsDiv.addEventListener('click', (e) => {
+//     const pageNumber = e.target.innerText;
+//     getProducts(pageNumber);
+// });
+
+async function addToCart(e) { 
 
     if(e.target.classList.contains('shop-btn')) {
         const albumDiv = e.target.parentElement.parentElement;
@@ -70,29 +91,30 @@ async function addToCart(e) {
 
             } else {
 
-                const li = 
-                `
-                <li id="${id}" class="cart-list-ul-li">
-                    <img src="${imageUrl}" alt="${title}">
-                    <div class="title-div-cart"> ${title} </div>
-                    <div class="price-div-cart"> ${price} </div>
-                    <input type="number" id="quantity-input" class="quantity-input" value="1">
-                    <button class="remove-button" id="remove-button"> Remove </button>
-                </li>
-                `
+                getCartProducts(1);
+                // const li = 
+                // `
+                // <li id="${id}" class="cart-list-ul-li">
+                //     <img src="${imageUrl}" alt="${title}">
+                //     <div class="title-div-cart"> ${title} </div>
+                //     <div class="price-div-cart"> ${price} </div>
+                //     <input type="number" id="quantity-input" class="quantity-input" value="1">
+                //     <button class="remove-button" id="remove-button"> Remove </button>
+                // </li>
+                // `
 
-                cartList.innerHTML += li;
+                // cartList.innerHTML += li;
 
-                const totalDiv = document.getElementById('total-div');
+                // const totalDiv = document.getElementById('total-div');
 
-                const existingPriceString = totalDiv.innerText.split(':');
-                const existingPrice = parseFloat(existingPriceString[1]);
+                // const existingPriceString = totalDiv.innerText.split(':');
+                // const existingPrice = parseFloat(existingPriceString[1]);
 
-                const totalPrice = (existingPrice + price).toFixed(2);
+                // const totalPrice = (existingPrice + price).toFixed(2);
 
-                totalDiv.innerText = `Total: ${totalPrice}`;
+                // totalDiv.innerText = `Total: ${totalPrice}`;
 
-                popupNotification(title);
+                // popupNotification(title);
             }
 
         }
@@ -100,23 +122,6 @@ async function addToCart(e) {
             console.log(err);
         }
     }
-}
-
-
-function popupNotification(title) {
-    const notifDiv = document.getElementById('notification');
-
-    const notif = document.createElement('div');
-
-    notif.classList.add('notification-add');
-
-    notif.innerText = `Your Product: ${title} has been added to the cart`;
-
-    notifDiv.appendChild(notif);
-
-    setTimeout(() => {
-        notif.remove();
-    },3000)
 }
 
 async function removeItemFromtCart(e) {
@@ -129,29 +134,32 @@ async function removeItemFromtCart(e) {
 
         const response = await axios.post(url);
 
-        const totalDiv = document.getElementById('total-div');
+        getCartProducts(1);
 
-        const existingPrice = totalDiv.innerText.split(':')[1];
+        // const totalDiv = document.getElementById('total-div');
 
-        const currentItemPrice = response.data.price;
+        // const existingPrice = totalDiv.innerText.split(':')[1];
 
-        const totalPrice = (parseFloat(existingPrice) - parseFloat(currentItemPrice)).toFixed(2);
+        // const currentItemPrice = response.data.price;
 
-        totalDiv.innerText = `Total: ${totalPrice}`;
+        // const totalPrice = (parseFloat(existingPrice) - parseFloat(currentItemPrice)).toFixed(2);
 
-        cartList.removeChild(li);
+        // totalDiv.innerText = `Total: ${totalPrice}`;
+
+        // cartList.removeChild(li);
     }
 }
 
-async function getProducts() {
+async function getProducts(page) {
 
     try {
-        const musicDiv = document.getElementById('Album-container');
-        const merchDiv = document.getElementById('product-container');
 
-        const musics = await axios.get('http://localhost:5010/products/get-musics');
+        // Getting Music Products
+        const musics = await axios.get('http://localhost:5010/products/get-musics?page=' + page);
 
-        musics.data.forEach((musics) => {
+        musicDiv.innerHTML = "";
+
+        musics.data.musics.forEach((musics) => {
 
             const musicsLiDiv = 
                 `
@@ -174,9 +182,12 @@ async function getProducts() {
             musicDiv.innerHTML += musicsLiDiv;
         })
 
-        const merches = await axios.get('http://localhost:5010/products/get-merches');
+        // Getting Merches Products
+        const merches = await axios.get('http://localhost:5010/products/get-merches?page=' + page);
 
-        merches.data.forEach((merches) => {
+        merchDiv.innerHTML = "";
+
+        merches.data.merches.forEach((merches) => {
             const merchesLiDiv = 
             `
                 <div id="${merches.id}">
@@ -197,35 +208,162 @@ async function getProducts() {
             merchDiv.innerHTML += merchesLiDiv;
         })
 
-        const cartItems = await axios.get('http://localhost:5010/cart/get-products');
-
-        let totalPrice = 0;
-
-        cartItems.data.forEach((cartItems) => {
-
-            totalPrice = (parseFloat(totalPrice) + parseFloat(cartItems.price)).toFixed(2);
-
-            const li = 
-                `
-                <li id="${cartItems.id}" class="cart-list-ul-li">
-                    <img src="${cartItems.imageUrl}" alt="${cartItems.title}">
-                    <div class="title-div-cart"> ${cartItems.title} </div>
-                    <div class="price-div-cart"> ${cartItems.price} </div>
-                    <input type="number" id="quantity-input" class="quantity-input" value="1">
-                    <button class="remove-button" id="remove-button"> Remove </button>
-                </li>
-                `;
-
-            cartList.innerHTML += li;
-        })
-
-
-        const totalDiv = document.getElementById('total-div');
-
-        totalDiv.innerText = `Total: ${totalPrice}`;
+        // Converting the page into pagination
+        pagination((musics.data.lastPage > merches.data.lastPage ? musics.data : merches.data));
 
     } catch(err) {
         console.log(err);
     }
 }
 
+async function getCartProducts(page) {
+
+    // Getting Cart Products
+    const cartItems = await axios.get('http://localhost:5010/cart/get-products/?page=' + page);
+
+    cartList.innerHTML = "";
+
+    let totalPrice = 0;
+
+    cartItems.data.cartItems.forEach((cartItems) => {
+
+        totalPrice = (parseFloat(totalPrice) + parseFloat(cartItems.price)).toFixed(2);
+
+        const li = 
+            `
+            <li id="${cartItems.id}" class="cart-list-ul-li">
+                <img src="${cartItems.imageUrl}" alt="${cartItems.title}">
+                <div class="title-div-cart"> ${cartItems.title} </div>
+                <div class="price-div-cart">$ ${cartItems.price} </div>
+                <input type="number" id="quantity-input" class="quantity-input" value="1">
+                <button class="remove-button" id="remove-button"> Remove </button>
+            </li>
+            `;
+
+        cartList.innerHTML += li;
+    })
+
+    // Calculating total price for cart
+    const totalDiv = document.getElementById('total-div');
+
+    totalDiv.innerText = `Total: ${totalPrice}`;
+
+    cartPagination(cartItems.data);
+}
+
+function popupNotification(title) {
+    const notifDiv = document.getElementById('notification');
+
+    const notif = document.createElement('div');
+
+    notif.classList.add('notification-add');
+
+    notif.innerText = `Your Product: ${title} has been added to the cart`;
+
+    notifDiv.appendChild(notif);
+
+    setTimeout(() => {
+        notif.remove();
+    },3000)
+}
+
+function pagination(data) {
+    
+    // Clearing existing buttons
+    pageButtonsDiv.innerHTML = '';
+
+    // Creating the previous Button if it exists
+    if(data.hasPreviousPage) {
+        const prevButton = document.createElement('button');
+
+        prevButton.innerHTML = data.previousPage;
+
+        prevButton.classList.add('page-buttons');
+
+        prevButton.addEventListener('click', () => {
+            getProducts(data.previousPage);
+        })
+
+        pageButtonsDiv.appendChild(prevButton);
+    }
+
+    const currentButton = document.createElement('button');
+
+    currentButton.innerHTML = data.currentPage;
+
+    currentButton.classList.add('page-buttons');
+    currentButton.classList.toggle('active');
+
+    currentButton.addEventListener('click', () => {
+        getProducts(data.currentPage);
+    })
+
+    pageButtonsDiv.appendChild(currentButton);
+
+    // Creating the next button if it exists
+    if(data.hasNextPage) {
+        const nextButton = document.createElement('button');
+
+        nextButton.innerHTML = data.nextPage;
+
+        nextButton.classList.add('page-buttons');
+
+        nextButton.addEventListener('click', () => {
+            getProducts(data.nextPage);
+        })
+
+        pageButtonsDiv.appendChild(nextButton);
+    }
+
+    
+}
+
+function cartPagination(cartData) {
+
+    // Clearing existing buttons
+    cartButtonsDiv.innerHTML = '';
+
+    // Creating the previous Button if it exists
+    if(cartData.hasPreviousPage) {
+        const prevButton = document.createElement('button');
+
+        prevButton.innerHTML = cartData.previousPage;
+
+        prevButton.classList.add('cart-page-buttons');
+
+        prevButton.addEventListener('click', () => {
+            getCartProducts(cartData.previousPage);
+        })
+
+        cartButtonsDiv.appendChild(prevButton);
+    }
+ 
+    const currentButton = document.createElement('button');
+
+    currentButton.innerHTML = cartData.currentPage;
+
+    currentButton.classList.add('cart-page-buttons');
+    currentButton.classList.toggle('active');
+
+    currentButton.addEventListener('click', () => {
+        getCartProducts(cartData.currentPage);
+    })
+ 
+    cartButtonsDiv.appendChild(currentButton);
+ 
+    // Creating the next button if it exists
+    if(cartData.hasNextPage) {
+        const nextButton = document.createElement('button');
+
+        nextButton.innerHTML = cartData.nextPage;
+
+        nextButton.classList.add('cart-page-buttons');
+
+        nextButton.addEventListener('click', () => {
+            getCartProducts(cartData.nextPage);
+        })
+
+        cartButtonsDiv.appendChild(nextButton);
+    }
+
+}
