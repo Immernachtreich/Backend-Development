@@ -29,10 +29,10 @@ const cartList = document.getElementById('cart-items-ul');
 // Page Buttons Div for event listener
 const pageButtonsDiv = document.getElementById('page-buttons-div');
 const cartButtonsDiv = document.getElementById('cart-page-buttons-div');
+const purchaseButton = document.getElementById('purchase-button');
 
 const musicDiv = document.getElementById('Album-container');
 const merchDiv = document.getElementById('product-container');
-
 
 /*
 * Event Listeners
@@ -41,6 +41,8 @@ const merchDiv = document.getElementById('product-container');
 shopSectionDiv.addEventListener('click', addToCart);
 
 cartList.addEventListener('click', removeItemFromtCart);
+
+purchaseButton.addEventListener('click', purchaseItems);
 
 window.addEventListener('DOMContentLoaded', () => {
     const page = 1
@@ -65,12 +67,11 @@ async function addToCart(e) {
         
         try{
             const product = await axios.get(url);
-
             const title = product.data.title;
             const price = product.data.price;
             const imageUrl = product.data.imageUrl;
             const id = product.data.id;
-
+            
             // const title = albumDiv.children[0].innerText;
             // const price = albumDiv.children[2].children[0].innerText;
             // const imgUrl = albumDiv.children[1].children[0].src;
@@ -90,7 +91,7 @@ async function addToCart(e) {
                 window.alert('Item is already in the cart');
 
             } else {
-
+                popupNotification(title);
                 getCartProducts(1);
                 // const li = 
                 // `
@@ -114,7 +115,6 @@ async function addToCart(e) {
 
                 // totalDiv.innerText = `Total: ${totalPrice}`;
 
-                // popupNotification(title);
             }
 
         }
@@ -183,33 +183,35 @@ async function getProducts(page) {
         })
 
         // Getting Merches Products
-        const merches = await axios.get('http://localhost:5010/products/get-merches?page=' + page);
+        // const merches = await axios.get('http://localhost:5010/products/get-merches?page=' + page);
 
-        merchDiv.innerHTML = "";
+        // merchDiv.innerHTML = "";
 
-        merches.data.merches.forEach((merches) => {
-            const merchesLiDiv = 
-            `
-                <div id="${merches.id}">
-                    <h3>${merches.title}</h3>
+        // merches.data.merches.forEach((merches) => {
+        //     const merchesLiDiv = 
+        //     `
+        //         <div id="${merches.id}">
+        //             <h3>${merches.title}</h3>
 
-                    <div class="img-cont">
-                        <img class="product-imgs" src="${merches.imageUrl}" alt="Mug">
-                    </div>
+        //             <div class="img-cont">
+        //                 <img class="product-imgs" src="${merches.imageUrl}" alt="Mug">
+        //             </div>
 
-                    <div class="product-details">
-                        <span>$<span>${merches.price}</span></span>
-                        <button class="shop-btn" type='button'>ADD TO CART</button>
-                    </div>
+        //             <div class="product-details">
+        //                 <span>$<span>${merches.price}</span></span>
+        //                 <button class="shop-btn" type='button'>ADD TO CART</button>
+        //             </div>
 
-                </div> 
-            `
+        //         </div> 
+        //     `
 
-            merchDiv.innerHTML += merchesLiDiv;
-        })
+        //     merchDiv.innerHTML += merchesLiDiv;
+        // })
 
         // Converting the page into pagination
-        pagination((musics.data.lastPage > merches.data.lastPage ? musics.data : merches.data));
+
+        // (musics.data.lastPage > merches.data.lastPage ? musics.data : merches.data)
+        pagination(musics.data);
 
     } catch(err) {
         console.log(err);
@@ -220,7 +222,6 @@ async function getCartProducts(page) {
 
     // Getting Cart Products
     const cartItems = await axios.get('http://localhost:5010/cart/get-products/?page=' + page);
-
     cartList.innerHTML = "";
 
     let totalPrice = 0;
@@ -250,6 +251,25 @@ async function getCartProducts(page) {
 
     cartPagination(cartItems.data);
 }
+
+async function purchaseItems(e) {
+    
+    if(cartList.children.length !== 0) {
+        
+        const response = await axios.post('http://localhost:5010/orders/add-order');
+
+        console.log(response);
+
+        cartList.innerHTML = "";
+    }
+    else {
+        window.alert('cart is empty');
+    }
+}
+
+
+
+
 
 function popupNotification(title) {
     const notifDiv = document.getElementById('notification');

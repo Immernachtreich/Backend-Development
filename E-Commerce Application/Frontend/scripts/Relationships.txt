@@ -1,0 +1,27 @@
+// New User table has to be introduced
+
+
+1. User --> Cart Products
+
+One User can have many products in a Cart
+One Cart product can only have one userID
+
+Cart Products Belongs to Only ONE User
+User has Many Cart Products
+
+It is a ONE TO MANY RELATIONSHIP
+You have to use a foreign key for one to many relationships
+
+2. Products --> Cart
+
+One Cart can have many different products
+One product can be in many different carts
+
+It is a many to many relationship
+Create new table called cartProducts to map each cart to each products
+
+
+3. On Click on Purchase Now:
+    1. New order id will be created
+    2. On table orderMusic it will have order id as fk and music id as fk
+    3. On loading of orders page it will show each order with order id and a list of products

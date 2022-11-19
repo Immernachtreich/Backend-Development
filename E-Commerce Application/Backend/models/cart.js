@@ -10,27 +10,23 @@ const Cart = sequelize.define('cart',{
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
-    },
-    
-    title: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-
-    price: {
-        type: Sequelize.FLOAT,
-        allowNull: false
-    },
-
-    imageUrl: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-
-    quantity: {
-        type: Sequelize.INTEGER,
-        allowNull: false 
     }
+    
+    // title: {
+    //     type: Sequelize.STRING,
+    // },
+
+    // price: {
+    //     type: Sequelize.FLOAT,
+    // },
+
+    // imageUrl: {
+    //     type: Sequelize.STRING,
+    // },
+
+    // quantity: {
+    //     type: Sequelize.INTEGER,
+    // }
 })
 
 module.exports = Cart;

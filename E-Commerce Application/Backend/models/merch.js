@@ -11,20 +11,20 @@ const Merch = sequelize.define('merch',{
         primaryKey: true
     },
     
-    title: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
+    // title: {
+    //     type: Sequelize.STRING,
+    //     allowNull: false
+    // },
 
-    price: {
-        type: Sequelize.FLOAT,
-        allowNull: false
-    },
+    // price: {
+    //     type: Sequelize.FLOAT,
+    //     allowNull: false
+    // },
 
-    imageUrl: {
-        type: Sequelize.STRING,
-        allowNull: false
-    }
+    // imageUrl: {
+    //     type: Sequelize.STRING,
+    //     allowNull: false
+    // }
 })
 
 module.exports = Merch;
