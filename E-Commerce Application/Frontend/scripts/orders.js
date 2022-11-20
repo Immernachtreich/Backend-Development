@@ -1,10 +1,58 @@
 const ordersSection = document.getElementById('orders-section');
 
-window.addEventListener('DOMContentLoaded', getOrders);
+window.addEventListener('DOMContentLoaded', () => {
+    getOrders(1);
+});
 
-async function getOrders() {
+async function getOrders(page) {
 
-    const orders = await axios.get('http://localhost:5010/orders/get-orders');
+    // Contains orderId and total Price
+    const orderDetails = await axios.get('http://localhost:5010/orders/get-order-details?page=' + page);
+    
+    // Contains a nested array of all the productdetails
+    const ordersProducts = await axios.get('http://localhost:5010/orders/get-orders');
 
-    // orders.data is a nested array 
+    const ordersSection = document.getElementById('orders-section');
+
+    // First Loop will run for the number of orders present 
+    for(let i = 0; i < orderDetails.data.length; i++) {
+        
+        const perOrderDiv = document.createElement('div');
+        perOrderDiv.classList.add('per-order-div');
+
+        perOrderDiv.innerHTML += `<h4>Order ID: ${orderDetails.data[i].id}</h4>`;
+
+        // Second loop will run for the products present per order
+        for(let j = 0; j < ordersProducts.data[i].length; j++) {
+
+            perOrderDiv.innerHTML +=
+                `
+                    <div class="per-order-product-div">
+
+                        <div class="per-order-product-image-div"> 
+                            <img src="${ordersProducts.data[i][j].imageUrl}" alt=""> 
+                        </div>
+                    
+                        <div class="per-order-product-details-div"> 
+                        
+                            <div> ${ordersProducts.data[i][j].title} </div>
+                            <div>$ ${ordersProducts.data[i][j].price} </div>
+                            <div>  Quantity: ${1} </div>
+
+                        </div>
+
+                    </div>
+                `
+        }
+
+        perOrderDiv.innerHTML += 
+            `
+                <div class="per-order-total-div"> 
+                <span> Total Price: ${orderDetails.data[i].totalPrice} </span> 
+                </div>
+            `
+
+        ordersSection.appendChild(perOrderDiv);
+    }
+
 }

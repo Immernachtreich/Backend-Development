@@ -79,7 +79,7 @@
 
 .main-header-nav-button {
     position: relative;
-    left: 78%;
+    left: 72%;
     height: 40px;
     width: 80px;
     background-color: rgb(171, 203, 202);
@@ -133,3 +133,5 @@
     background-color: #4980ef;
     color: white;
 }
+
+

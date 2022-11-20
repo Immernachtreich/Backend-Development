@@ -91,7 +91,7 @@ async function addToCart(e) {
                 window.alert('Item is already in the cart');
 
             } else {
-                popupNotification(title);
+                popupNotification(`Your Product: ${title} has been added to the cart`);
                 getCartProducts(1);
                 // const li = 
                 // `
@@ -258,9 +258,9 @@ async function purchaseItems(e) {
         
         const response = await axios.post('http://localhost:5010/orders/add-order');
 
-        console.log(response);
-
         cartList.innerHTML = "";
+
+        popupNotification('Order Was SuccessFully Placed');
     }
     else {
         window.alert('cart is empty');
@@ -271,14 +271,14 @@ async function purchaseItems(e) {
 
 
 
-function popupNotification(title) {
+function popupNotification(message) {
     const notifDiv = document.getElementById('notification');
 
     const notif = document.createElement('div');
 
     notif.classList.add('notification-add');
 
-    notif.innerText = `Your Product: ${title} has been added to the cart`;
+    notif.innerText = message;
 
     notifDiv.appendChild(notif);
 
@@ -387,3 +387,4 @@ function cartPagination(cartData) {
     }
 
 }
+ 

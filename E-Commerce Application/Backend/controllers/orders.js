@@ -102,3 +102,12 @@ exports.getAllOrders = async (req, res, next) => {
     res.json(ordersArray);
 }
 
+exports.getOrderDetails = async (req, res, next) => {
+    
+    const user = await Users.findByPk(1);
+
+    // orders will be an array
+    const orders = await user.getOrders();
+
+    res.json(orders);
+}

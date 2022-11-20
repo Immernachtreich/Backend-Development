@@ -36,7 +36,7 @@ body::-webkit-scrollbar {
     padding: 0;
     display: flex;
     position: relative;
-    left: 42.5%;
+    left: 40%;
 }
 
 .main-header-nav-ul-li {
