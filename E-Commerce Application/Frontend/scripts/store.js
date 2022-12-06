@@ -128,25 +128,31 @@ async function removeItemFromtCart(e) {
 
     if(e.target.classList.contains('remove-button')) {
         
-        const li = e.target.parentElement;
+        try{
 
-        const url = 'http://localhost:5010/cart/delete-product/' + li.id;
+            const li = e.target.parentElement;
 
-        const response = await axios.post(url);
+            const url = 'http://localhost:5010/cart/delete-product/' + li.id;
 
-        getCartProducts(1);
+            const response = await axios.post(url);
 
-        // const totalDiv = document.getElementById('total-div');
+            getCartProducts(1);
 
-        // const existingPrice = totalDiv.innerText.split(':')[1];
+            // const totalDiv = document.getElementById('total-div');
 
-        // const currentItemPrice = response.data.price;
+            // const existingPrice = totalDiv.innerText.split(':')[1];
 
-        // const totalPrice = (parseFloat(existingPrice) - parseFloat(currentItemPrice)).toFixed(2);
+            // const currentItemPrice = response.data.price;
 
-        // totalDiv.innerText = `Total: ${totalPrice}`;
+            // const totalPrice = (parseFloat(existingPrice) - parseFloat(currentItemPrice)).toFixed(2);
 
-        // cartList.removeChild(li);
+            // totalDiv.innerText = `Total: ${totalPrice}`;
+
+            // cartList.removeChild(li);
+            
+        } catch(err) {
+
+        }
     }
 }
 
@@ -220,47 +226,60 @@ async function getProducts(page) {
 
 async function getCartProducts(page) {
 
-    // Getting Cart Products
-    const cartItems = await axios.get('http://localhost:5010/cart/get-products/?page=' + page);
-    cartList.innerHTML = "";
+    try{
 
-    let totalPrice = 0;
+        // Getting Cart Products
+        const cartItems = await axios.get('http://localhost:5010/cart/get-products/?page=' + page);
+        cartList.innerHTML = "";
 
-    cartItems.data.cartItems.forEach((cartItems) => {
+        let totalPrice = 0;
 
-        totalPrice = (parseFloat(totalPrice) + parseFloat(cartItems.price)).toFixed(2);
+        cartItems.data.cartItems.forEach((cartItems) => {
 
-        const li = 
-            `
-            <li id="${cartItems.id}" class="cart-list-ul-li">
-                <img src="${cartItems.imageUrl}" alt="${cartItems.title}">
-                <div class="title-div-cart"> ${cartItems.title} </div>
-                <div class="price-div-cart">$ ${cartItems.price} </div>
-                <input type="number" id="quantity-input" class="quantity-input" value="1">
-                <button class="remove-button" id="remove-button"> Remove </button>
-            </li>
-            `;
+            totalPrice = (parseFloat(totalPrice) + parseFloat(cartItems.price)).toFixed(2);
 
-        cartList.innerHTML += li;
-    })
+            const li = 
+                `
+                <li id="${cartItems.id}" class="cart-list-ul-li">
+                    <img src="${cartItems.imageUrl}" alt="${cartItems.title}">
+                    <div class="title-div-cart"> ${cartItems.title} </div>
+                    <div class="price-div-cart">$ ${cartItems.price} </div>
+                    <input type="number" id="quantity-input" class="quantity-input" value="1">
+                    <button class="remove-button" id="remove-button"> Remove </button>
+                </li>
+                `;
 
-    // Calculating total price for cart
-    const totalDiv = document.getElementById('total-div');
+            cartList.innerHTML += li;
+        })
 
-    totalDiv.innerText = `Total: ${totalPrice}`;
+        // Calculating total price for cart
+        const totalDiv = document.getElementById('total-div');
 
-    cartPagination(cartItems.data);
+        totalDiv.innerText = `Total: ${totalPrice}`;
+
+        cartPagination(cartItems.data);
+
+    } catch(err) {
+        console.log(err);
+    }
 }
 
 async function purchaseItems(e) {
     
     if(cartList.children.length !== 0) {
         
-        const response = await axios.post('http://localhost:5010/orders/add-order');
+        try{
 
-        cartList.innerHTML = "";
+            const response = await axios.post('http://localhost:5010/orders/add-order');
 
-        popupNotification('Order Was SuccessFully Placed');
+            cartList.innerHTML = "";
+
+            popupNotification('Order Was SuccessFully Placed');
+            
+        } catch(err) {
+            console.log(err);
+        }
+        
     }
     else {
         window.alert('cart is empty');

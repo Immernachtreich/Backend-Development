@@ -1,0 +1,50 @@
+1. Users 
+2. Reviews
+3. Restaurants
+
+--------------------------------------------------
+
+1. User  1<-->M Reviews
+
+One User can only leave many Reviews.
+One Review can only be left by one User.
+
+Therefore it is a ONE TO MANY relationship.
+
+2. Reviews M<-->1 Restaurants
+
+One Restaurants can have Many Reviews.
+One Review can belong to only one Restaurant.
+
+Therefore it is a ONE TO MANY relationship.
+
+3. Restaurants M<-->M User
+
+One Restaurant can be visited by many Users.
+One User can visit many Restaurants.
+
+Therefore it is a MANY TO MANY relationship
+
+--------------------------------------------------
+
+1. User Table:
+
+id  name    email   phoneNumber
+
+
+
+2. Review Table
+
+id  stars   description   userId    restaurantId
+
+
+
+3. Restaurant Table
+
+id  name    location    
+
+
+
+4. UserRestaurant Table
+
+id   restaurantId    userId

@@ -70,44 +70,57 @@ exports.postOrder = async (req, res, next) => {
 
 exports.getAllOrders = async (req, res, next) => {
 
-    const user = await Users.findByPk(1);
+    try{
 
-    // orders will be an array
-    const orders = await user.getOrders();
+        const user = await Users.findByPk(1);
 
-    const ordersArray = [];
+        // orders will be an array
+        const orders = await user.getOrders();
 
-    // [order1 = [prod1, prod2, prod3], 
-    //  order2 = [prod1, prod2, prod3], 
-    //  order3 = [prod1, prod2, prod3]]
+        const ordersArray = [];
 
-    for(let i = 0; i < orders.length; i++) {
-        
-        const orderDetails = await OrdersProducts.findAll( { where: {orderId: orders[i].id } } );
-        const productsArray = [];
+        // [order1 = [prod1, prod2, prod3], 
+        //  order2 = [prod1, prod2, prod3], 
+        //  order3 = [prod1, prod2, prod3]]
 
-        for(let j = 0; j < orderDetails.length; j++) {
+        for(let i = 0; i < orders.length; i++) {
+            
+            const orderDetails = await OrdersProducts.findAll( { where: {orderId: orders[i].id } } );
+            const productsArray = [];
 
-            const musicId = orderDetails[j].dataValues.musicId;
+            for(let j = 0; j < orderDetails.length; j++) {
 
-            const product = await Music.findByPk(musicId);
+                const musicId = orderDetails[j].dataValues.musicId;
 
-            productsArray.push(product);
+                const product = await Music.findByPk(musicId);
+
+                productsArray.push(product);
+            }
+
+            ordersArray.push(productsArray);
+
         }
 
-        ordersArray.push(productsArray);
+        res.json(ordersArray);
 
+    } catch(err) {
+
+        console.log(err);
     }
-
-    res.json(ordersArray);
 }
 
 exports.getOrderDetails = async (req, res, next) => {
-    
-    const user = await Users.findByPk(1);
+    try{
 
-    // orders will be an array
-    const orders = await user.getOrders();
+        const user = await Users.findByPk(1);
 
-    res.json(orders);
+        // orders will be an array
+        const orders = await user.getOrders();
+
+        res.json(orders);
+        
+    } catch(err) {
+        
+        console.log(err);
+    }
 }
