@@ -1,0 +1,45 @@
+Question 1: Typescript allows us to have a strict type. Having a strict type allows us to correct data if its of incorrect type. 
+
+Eg: 
+
+function add(num1, num2) { return num1 + num2; } 
+
+console.log(add('1', '3'));
+
+
+
+Here if we would get the output as 13 instead of 4 as we would expect. Here type script would allow us to set strict type so that we can avoid this type of errors.
+
+
+
+Question 2: 
+
+Types: It add strict types for javascript such as only accepting integer values and not string values.
+Next-Gen JS features: It adds next gen features such as method overloading.
+Non Next-Gen JS features: It adds features that doesn't exists in JS before such as interfaces.
+Meta-Programming features: It adds features like decorators when a certain line of code will result in an error or a line of code might be redundant.
+Rich Configuration options: It has a vast range of configuration options that can help during development.
+
+
+---------------------------------------------------------------------------------
+
+
+
+Question 1: We need a typescript compiler to convert typescript code into JS code so that it is readable by the browser.
+
+
+
+Question 2: When we compile, type script converts the typescript code into plain JS code.
+
+
+
+Question 4: The core types available in TS are:
+
+Number
+String
+Boolean
+Object
+Array
+
+
+Question 5: Because the trainer has defined a strict type of number to the parameter, TS will show an error because the passed arguments are of different type. 
